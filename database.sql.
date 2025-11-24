@@ -1,0 +1,62 @@
+-- -----------------------------------------------------
+-- DATABASE: Online Bookstore Management System
+-- -----------------------------------------------------
+
+CREATE DATABASE IF NOT EXISTS bookstore_db;
+USE bookstore_db;
+
+-- -----------------------------------------------------
+-- TABLE: USERS
+-- -----------------------------------------------------
+-- role = 'admin' or 'user'
+
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    role ENUM('admin', 'user') NOT NULL
+);
+
+-- Insert default admin
+INSERT INTO users (username, password, role)
+VALUES ('admin', 'admin123', 'admin');
+
+-- -----------------------------------------------------
+-- TABLE: BOOKS
+-- -----------------------------------------------------
+
+CREATE TABLE books (
+    book_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(200) NOT NULL,
+    author VARCHAR(200) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    stock INT NOT NULL DEFAULT 10
+);
+
+-- Sample book data
+INSERT INTO books (title, author, price, stock) VALUES
+('The Alchemist', 'Paulo Coelho', 350.00, 20),
+('Harry Potter and the Sorcerer\'s Stone', 'J.K. Rowling', 550.00, 15),
+('Atomic Habits', 'James Clear', 499.00, 30),
+('Java Programming', 'James Gosling', 650.00, 25);
+
+
+-- -----------------------------------------------------
+-- TABLE: ORDERS
+-- -----------------------------------------------------
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+    quantity INT DEFAULT 1,
+    total_price DECIMAL(10,2),
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
+
+-- -----------------------------------------------------
+-- END OF DATABASE
+-- -----------------------------------------------------
